@@ -46,10 +46,10 @@ function getBooks(booktitle: string){
     .then(res => res.json());
     //.then(books => console.log(books));
 
-    from(promise)
+    return from(promise)
     .pipe(
 
-        switchMap((data:GoogleBook) => from(data.items)),
+        switchMap((data:GoogleBook) => from(data.items || [])),
 
         map( (ele:BookItem) => {
             const book:Book = {
@@ -95,8 +95,33 @@ function displayBook(book: Book){
         books.appendChild(div);
         
     }
-    
 
 }
 
-getBooks('game of thrones');
+function searchBooks(){
+    
+    const searchEle = document.querySelector('#search');
+
+     const {fromEvent } = rxjs;
+     const { filter, map, switchMap} = rxjs.operators;
+
+    if(searchEle){
+        
+        fromEvent(searchEle, 'keyup')
+        .pipe(
+            map((ele:any) => ele.target.value),
+
+            filter((ele:string) => ele.length >2 ),
+
+            switchMap((ele:string) => getBooks(ele))
+            )
+
+        //.subscribe((ele :string) => alert(ele));
+        .subscribe((book: Book) => displayBook(book));
+
+   
+    //getBooks('game of thrones');
+
+    }
+}
+searchBooks();

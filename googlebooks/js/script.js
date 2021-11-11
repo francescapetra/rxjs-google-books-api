@@ -5,8 +5,8 @@ function getBooks(booktitle) {
     var promise = fetch(apiurl + booktitle)
         .then(function (res) { return res.json(); });
     //.then(books => console.log(books));
-    from(promise)
-        .pipe(switchMap(function (data) { return from(data.items); }), map(function (ele) {
+    return from(promise)
+        .pipe(switchMap(function (data) { return from(data.items || []); }), map(function (ele) {
         var book = {
             title: ele.volumeInfo.title,
             categories: ele.volumeInfo.categories,
@@ -28,4 +28,16 @@ function displayBook(book) {
         books.appendChild(div);
     }
 }
-getBooks('game of thrones');
+function searchBooks() {
+    var searchEle = document.querySelector('#search');
+    var fromEvent = rxjs.fromEvent;
+    var _a = rxjs.operators, filter = _a.filter, map = _a.map, switchMap = _a.switchMap;
+    if (searchEle) {
+        fromEvent(searchEle, 'keyup')
+            .pipe(map(function (ele) { return ele.target.value; }), filter(function (ele) { return ele.length > 2; }), switchMap(function (ele) { return getBooks(ele); }))
+            //.subscribe((ele :string) => alert(ele));
+            .subscribe(function (book) { return displayBook(book); });
+        //getBooks('game of thrones');
+    }
+}
+searchBooks();
