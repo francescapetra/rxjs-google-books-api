@@ -1,3 +1,4 @@
+"use strict";
 function getBooks(booktitle) {
     var from = rxjs.from;
     var _a = rxjs.operators, map = _a.map, switchMap = _a.switchMap, tap = _a.tap;
