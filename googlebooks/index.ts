@@ -49,6 +49,8 @@ function getBooks(booktitle: string){
     return from(promise)
     .pipe(
 
+        tap( (data:GoogleBook) => showTotal(data.items.length)),
+
         switchMap((data:GoogleBook) => from(data.items || [])),
 
         map( (ele:BookItem) => {
@@ -64,7 +66,7 @@ function getBooks(booktitle: string){
         ),
         //tap((book: Book) => console.log(book))
     )
-    .subscribe((book: Book) => displayBook(book));
+    //.subscribe((book: Book) => displayBook(book));
 }
 
 function displayBook(book: Book){
@@ -98,12 +100,25 @@ function displayBook(book: Book){
 
 }
 
+function cleanBookTpl() {
+
+    //alert('clean'); 
+    const books = document.querySelector('#books');
+
+    if (books) {
+        
+        books.innerHTML = '';
+        
+    }
+
+}
+
 function searchBooks(){
     
     const searchEle = document.querySelector('#search');
 
      const {fromEvent } = rxjs;
-     const { filter, map, switchMap} = rxjs.operators;
+     const { filter, map, switchMap, debounceTime, tap} = rxjs.operators;
 
     if(searchEle){
         
@@ -112,6 +127,10 @@ function searchBooks(){
             map((ele:any) => ele.target.value),
 
             filter((ele:string) => ele.length >2 ),
+
+            debounceTime(1000),
+
+            tap(()=> cleanBookTpl()),
 
             switchMap((ele:string) => getBooks(ele))
             )
@@ -125,3 +144,15 @@ function searchBooks(){
     }
 }
 searchBooks();
+
+function showTotal(total: number) {
+    
+    const found = document.querySelector('#found');
+
+    if(found){
+
+    found.textContent = ''+total;
+    
+ }
+
+}
