@@ -88,10 +88,15 @@ function displayBook(book: Book){
     div.setAttribute('class','col-md-3');
     div.innerHTML = bookTpl;
 
-    document.querySelector('#books').appendChild(div);
-    
+    const books = document.querySelector('#books');
+
+    if (books) {
+        
+        books.appendChild(div);
+        
+    }
     
 
 }
 
-getBooks('il conte di montecristo');
+getBooks('game of thrones');
