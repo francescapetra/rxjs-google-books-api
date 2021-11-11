@@ -21,16 +21,16 @@ interface BookThumbnails{
     smallThumbnail: string
     thumbnail: string
 }
+interface BookItem{
+    volumeInfo: VolumeInfo
+    id: string
+}
 interface Book {
     title: string
     description: string
     authors: [ ]
     categories:[]
     thumbnail : string
-}
-interface BookItem{
-    volumeInfo: VolumeInfo
-    id: string
 }
 
 
@@ -62,9 +62,36 @@ function getBooks(booktitle: string){
             return book;
             }
         ),
-        tap((book: Book) => console.log(book))
+        //tap((book: Book) => console.log(book))
     )
-    .subscribe((data: GoogleBook) =>  data);
+    .subscribe((book: Book) => displayBook(book));
 }
 
-getBooks('game of thrones');
+function displayBook(book: Book){
+    const bookTpl = `
+        <div class="card mb-4 shadow-sm">   
+            <img src="${book.thumbnail}" title="${book.title}"  alt="${book.title}">
+            <div class="card-body">
+                <h5>${book.title}</h5>
+                <p class="card-text"></p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                    </div>
+                    <small class="text-muted">9 mins</small>  
+                </div>
+            </div>
+        </div>`;
+
+    const div = document.createElement('div');
+    div.setAttribute('class','col-md-3');
+    div.innerHTML = bookTpl;
+
+    document.querySelector('#books').appendChild(div);
+    
+    
+
+}
+
+getBooks('il conte di montecristo');
