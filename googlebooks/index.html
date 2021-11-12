@@ -61,11 +61,14 @@
 
                 <form class="form-inline mt-2 mt-md-0">
                     <input class="form-control mr-sm-2" type="text" placeholder="Search" id="search" aria-label="Search">
-                    <button onclick="" class="btn btn-outline-success my-2 my-sm-0"
-                        type="button">Search</button>
-                        &nbsp;  
-                    <button class="btn btn-info my-2 my-sm-0" type="button">Clear</button>
-
+                    <button onclick="searchButtonClicked()
+                    ;document.querySelector('#search').value=''
+                    ;cleanBookTpl()" 
+                    class="btn btn-outline-success my-2 my-sm-0" type="button">Search</button>
+                
+                    &nbsp;<button onclick="document.querySelector('#search').value='';cleanBookTpl()" 
+                    class="btn btn-info my-2 my-sm-0"type="button">Clear</button>
+                
                 </form>
             </div>
         </div>

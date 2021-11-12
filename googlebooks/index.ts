@@ -42,7 +42,7 @@ function getBooks(booktitle: string){
 
     let apiurl ='https://www.googleapis.com/books/v1/volumes?q=';
 
-    const promise = fetch(apiurl + booktitle)
+    const promise = fetch(apiurl + booktitle + '&maxResults=18')
     .then(res => res.json());
     //.then(books => console.log(books));
 
@@ -87,7 +87,7 @@ function displayBook(book: Book){
         </div>`;
 
     const div = document.createElement('div');
-    div.setAttribute('class','col-md-3');
+    div.setAttribute('class','col-md-2');
     div.innerHTML = bookTpl;
 
     const books = document.querySelector('#books');
@@ -108,6 +108,7 @@ function cleanBookTpl() {
     if (books) {
         
         books.innerHTML = '';
+        
         
     }
 
@@ -136,14 +137,14 @@ function searchBooks(){
             )
 
         //.subscribe((ele :string) => alert(ele));
-        .subscribe((book: Book) => displayBook(book));
+        //.subscribe((book: Book) => displayBook(book));
 
    
     //getBooks('game of thrones');
 
     }
 }
-searchBooks();
+
 
 function showTotal(total: number) {
     
@@ -155,4 +156,15 @@ function showTotal(total: number) {
     
  }
 
+}
+
+searchBooks();
+
+function searchButtonClicked(){
+
+    const books:any = document.querySelector('#search');
+
+    if(books){
+        getBooks(books.value) .subscribe((book:Book) => displayBook(book))
+    } 
 }
